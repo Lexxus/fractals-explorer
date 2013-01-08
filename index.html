@@ -17,6 +17,11 @@
 		.left-panel > div input{
 			width: 149px;
 		}
+		.right-panel textarea{
+			width: 440px;
+			height: 200px;
+			margin-left: 10px
+		}
 		.code{
 			font-family: Courier New, Courier, console;
 		}
@@ -31,11 +36,14 @@
 			padding: 7px 10px;
 			border: 1px #900 solid;
 			display: inline-block;
-			margin-top: 10px;
+			margin: 10px 0;
 		}
 		#formula small {
 			color: gray;
 			margin-left: 20px;
+		}
+		#benchmark{
+			font-weight: bold;
 		}
 	</style>
 </head>
@@ -60,9 +68,10 @@
 			<button id="julia2">Julia2</button><button id="julia3">Julia3</button><button id="julia4">Julia4</button><button id="julia5">Julia5</button>
 		</div>
 		<label for="code" class="code block">function(x, y, limit){</label>
-		<textarea id="code" style="width:440px; height:200px;"></textarea>
+		<textarea id="code"></textarea>
 		<div class="code">}</div>
 		<div id="formula"></div>
+		<div>Render time: <span id="benchmark"></span> s</div>
 	</div>
 
 	<script src="js/fractal.js"></script>

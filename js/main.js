@@ -2,7 +2,7 @@
 	var fractals = {
 		Mandelbrot2: {
 			code: "var zX = x, zY = y, z = .0, n = 0,\n\
-zX2 = x*x, zY2 = y*y;\n\
+    zX2 = x*x, zY2 = y*y;\n\
 while((zX2 + zY2) < 16 && n < limit){\n\
   z = zX2 - zY2 + x;\n\
   zY = ((zX * zY)*2) + y;\n\
@@ -21,7 +21,7 @@ return n;",
 		},
 		Mandelbrot3: {
 			code: "var zX = x, zY = y, z = .0, n = 0,\n\
-zX2 = x*x, zY2 = y*y;\n\
+    zX2 = x*x, zY2 = y*y;\n\
 while((zX2 + zY2) < 16 && n < limit){\n\
   z = (zX2 - 3*zY2)*zX + x;\n\
   zY = (3*zX2 - zY2)*zY + y;\n\
@@ -40,7 +40,7 @@ return n;",
 		},
 		Mandelbrot4: {
 			code: "var zX = x, zY = y, z = .0, n = 0,\n\
-zX2 = x*x, zY2 = y*y;\n\
+    zX2 = x*x, zY2 = y*y;\n\
 while((zX2 + zY2) < 16 && n < limit){\n\
   z = zX2*(zX2 - 6*zY2) + zY2*zY2 + x;\n\
   zY = 4*zX*zY*(zX2 - zY2) + y;\n\
@@ -58,8 +58,8 @@ return n;",
 			formula: 'Z<sub>n+1</sub> = Z<sub>n</sub><sup>4</sup> + C; <small>Z<sub>0</sub> = 0, C = x + iy</small>'
 		},
 		Mandelbrot5: {
-			code: "var zX = x, zY = y, z = .0, n = 0,\n\
-zX2 = x*x, zY2 = y*y, zX4 = .0, zY4 = .0, zXY10 = .0;\n\
+			code: "var zX = x, zY = y, z=.0, n=0,\n\
+    zX2 = x*x, zY2 = y*y, zX4=.0, zY4=.0, zXY10=.0;\n\
 while((zX2 + zY2) < 16 && n < limit){\n\
   zX4 = zX2*zX2;\n\
   zY4 = zY2*zY2;\n\
@@ -81,7 +81,7 @@ return n;",
 		},
 		Julia2: {
 			code: "var zX = x, zY = y, z = .0, n = 0,\n\
-zX2 = x*x, zY2 = y*y;\n\
+    zX2 = x*x, zY2 = y*y;\n\
 while((zX2 + zY2) < 16 && n < limit){\n\
   z = zX2 - zY2 + .24;\n\
   zY = ((zX * zY)*2) - .56;\n\
@@ -100,7 +100,7 @@ return n;",
 		},
 		Julia3: {
 			code: "var zX = x, zY = y, z = .0, n = 0,\n\
-zX2 = x*x, zY2 = y*y;\n\
+    zX2 = x*x, zY2 = y*y;\n\
 while((zX2 + zY2) < 16 && n < limit){\n\
   z = (zX2 - 3*zY2)*zX + .51111111;\n\
   zY = (3*zX2 - zY2)*zY - .10000000;\n\
@@ -119,7 +119,7 @@ return n;",
 		},
 		Julia4: {
 			code: "var zX = x, zY = y, z = .0, n = 0,\n\
-zX2 = x*x, zY2 = y*y;\n\
+    zX2 = x*x, zY2 = y*y;\n\
 while((zX2 + zY2) < 16 && n < limit){\n\
   z = zX2*(zX2 - 6*zY2) + zY2*zY2 + .65;\n\
   zY = 4*zX*zY*(zX2 - zY2) - .2;\n\
@@ -137,8 +137,8 @@ return n;",
 			formula: 'Z<sub>n+1</sub> = Z<sub>n</sub><sup>4</sup> + C; <small>Z<sub>0</sub> = x + iy, C = 0.65 - i0.2</small>'
 		},
 		Julia5: {
-			code: "var zX = x, zY = y, z = .0, n = 0,\n\
-zX2 = x*x, zY2 = y*y, zX4 = .0, zY4 = .0, zXY10 = .0;\n\
+			code: "var zX = x, zY = y, z=.0, n=0,\n\
+    zX2 = x*x, zY2 = y*y, zX4=.0, zY4=.0, zXY10=.0;\n\
 while((zX2 + zY2) < 16 && n < limit){\n\
   zX4 = zX2*zX2;\n\
   zY4 = zY2*zY2;\n\
@@ -295,7 +295,11 @@ return n;",
 		iW = parseFloat(doc.el('width').value);
 		iN = parseInt(doc.el('iterations').value);
 
-		console.time('fractal');
+		//console.time('fractal');
+		var benchEl = doc.el('benchmark'),
+			time = 0;
+		benchEl.innerHTML = '...';
+		time = Date.now();
 		fractal(canvas, {
 			x:iX,
 			y:iY,
@@ -303,8 +307,8 @@ return n;",
 			n: iN,
 			fn: getFn('code')
 		}, function(){
-			console.timeEnd('fractal');
-			console.log('draw end');
+			//console.timeEnd('fractal');
+			benchEl.innerHTML = (Date.now() - time) / 1000;
 			imgData = canvas.getContext('2d').getImageData(0,0, width, height);
 		});
 	}
