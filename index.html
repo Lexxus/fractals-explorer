@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Fractal</title>
+	<style>
+		#container canvas {
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+		.left-panel{
+			float:left;
+			margin-right: 10px;
+			padding-right: 10px;
+			border-right: 1px dotted #DDD;
+		}
+		.left-panel > div input{
+			width: 149px;
+		}
+		.code{
+			font-family: Courier New, Courier, console;
+		}
+		.block{
+			display: block;
+		}
+		#start{
+			font-size: 120%;
+		}
+		#formula {
+			font-size: 150%;
+			padding: 7px 10px;
+			border: 1px #900 solid;
+			display: inline-block;
+			margin-top: 10px;
+		}
+		#formula small {
+			color: gray;
+			margin-left: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="left-panel">
+		<div>
+			<label for="startX">X:</label><input id="startX" value="" title="X Coordinate of the left-top corner"/>
+			<label for="startY">Y:</label><input id="startY" value="" title="Y Coordinate of the left-top corner"/>
+			<label for="width">W:</label><input id="width" value="" title="WIDTH"/>
+			<label for="iterations">N:</label><input id="iterations" value="120" title="Maximum Number of iterations"/>
+			<button id="start">Start</button>
+			<button id="reset">Reset</button>
+		</div>
+		<div id="container" style="border: 1px gray solid; position: relative; width: 800px; height: 700px;">
+			<canvas id="layer-0" width="800" height="700"></canvas>
+			<canvas id="layer-1" width="800" height="700"></canvas>
+		</div>
+	</div>
+	<div class="right-panel">
+		<div id="fractals">
+			<button id="mandelbrot2" disabled>Mandelbrot2</button><button id="mandelbrot3">Mandelbrot3</button><button id="mandelbrot4">Mandelbrot4</button><button id="mandelbrot5">Mandelbrot5</button><br/>
+			<button id="julia2">Julia2</button><button id="julia3">Julia3</button><button id="julia4">Julia4</button><button id="julia5">Julia5</button>
+		</div>
+		<label for="code" class="code block">function(x, y, limit){</label>
+		<textarea id="code" style="width:440px; height:200px;"></textarea>
+		<div class="code">}</div>
+		<div id="formula"></div>
+	</div>
+
+	<script src="js/fractal.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>
