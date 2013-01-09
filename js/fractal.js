@@ -2,7 +2,7 @@ function fractal(canvas, cfg, callback){
     var ctx = canvas.getContext(('2d')),
         w = canvas.width,
         h = canvas.height,
-		x = cfg.x, y = cfg.y,
+		x = cfg.x, y = cfg.y, cY = 0,
 		width = cfg.width, height = cfg.height,
         iLimit = cfg.n, iLimit12 = iLimit >> 1, iLimit1 = ~~(iLimit12 / 5),
         stepX = width / w, stepY = stepX;
@@ -11,16 +11,16 @@ function fractal(canvas, cfg, callback){
         stepY = height / h;
     }
 
-    var imgData = ctx.getImageData(0,0, w,h),
+    var imgData = ctx.getImageData(0,0, w,1),
+		iLen = imgData.data.length,
         kc1 = 0xFF / iLimit1,
 		kc2 = 0xFF / iLimit12,
 		kc3 = 128 / iLimit1;
 
-    var i = 0, l = imgData.data.length;
     step();
 
     function step(){
-        if(i >= l){
+        if(cY >= h){
             doF = false;
 			if(typeof callback === 'function'){
 				callback();
@@ -33,18 +33,9 @@ function fractal(canvas, cfg, callback){
             return;
         }
 
-        var xx = 0, n = 0,
-			//zX = .0, zY = .0, z = .0,
+        var n = 0, i = 0,
 			r, g, b;
-        while(xx < w){
-            /*zX = x, zY = y, n = 0;
-
-            while((zX*zX + zY*zY) < 4 && n < iLimit){
-                z = zX * zX - zY * zY + x;
-                zY = 2 * zX * zY + y;
-                zX = z;
-                ++n;
-            }*/
+        while(i < iLen){
 			n = cfg.fn(x, y, iLimit);
 
             if(n < iLimit){
@@ -94,12 +85,11 @@ function fractal(canvas, cfg, callback){
             imgData.data[i++] = 255;
 
             x += stepX;
-            ++xx;
         }
         x = cfg.x;
         y -= stepY;
 
-        ctx.putImageData(imgData, 0,0);
+		ctx.putImageData(imgData, 0, cY++);
         setTimeout(arguments.callee, 0);
     }
 }

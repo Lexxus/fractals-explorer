@@ -320,12 +320,7 @@ return n;",
 	}
 
 	function getFn(id){
-		var code = 'var fn = function(x,y,limit){'
-			+doc.el(id).value
-			+'}';
-
-		eval(code);
-		return fn;
+		return new Function('x', 'y', 'limit', doc.el(id).value);
 	}
 
 	function setFractal(name, notDraw){
