@@ -284,6 +284,12 @@ return n;",
 
 	setFractal(currentFractal, true);
 
+
+    window.onload = function(){
+        draw(canvasFractal);
+    }
+
+
 	function clear(){
 		ctx.clearRect(0,0, width, height);
 	}
