@@ -1,0 +1,42 @@
+#container canvas {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.left-panel{
+	float:left;
+	margin-right: 10px;
+	padding-right: 10px;
+	border-right: 1px dotted #DDD;
+}
+.left-panel > div input{
+	width: 149px;
+}
+.right-panel textarea{
+	width: 440px;
+	height: 200px;
+	margin-left: 10px
+}
+.code{
+	font-family: Courier New, Courier, console;
+}
+.block{
+	display: block;
+}
+#start{
+	font-size: 120%;
+}
+#formula {
+	font-size: 150%;
+	padding: 7px 10px;
+	border: 1px #900 solid;
+	display: inline-block;
+	margin: 10px 0;
+}
+#formula small {
+	color: gray;
+	margin-left: 20px;
+}
+#benchmark{
+	font-weight: bold;
+}
