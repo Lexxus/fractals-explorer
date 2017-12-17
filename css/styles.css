@@ -3,27 +3,30 @@
 	left: 0;
 	top: 0;
 }
-.left-panel{
+.left-panel {
 	float:left;
 	margin-right: 10px;
 	padding-right: 10px;
 	border-right: 1px dotted #DDD;
 }
-.left-panel > div input{
+.left-panel > div input {
 	width: 149px;
 }
-.right-panel textarea{
+.right-panel textarea {
 	width: 440px;
 	height: 200px;
 	margin-left: 10px
 }
-.code{
+.code {
 	font-family: Courier New, Courier, console;
 }
-.block{
+.block {
 	display: block;
 }
-#start{
+.current {
+	font-weight: bold;
+}
+#start {
 	font-size: 120%;
 }
 #formula {
@@ -37,6 +40,6 @@
 	color: gray;
 	margin-left: 20px;
 }
-#benchmark{
+#benchmark {
 	font-weight: bold;
 }

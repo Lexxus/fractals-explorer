@@ -51,7 +51,7 @@
     }
 
     // setup canvas size
-    height = window.innerHeight - offsetY;
+    height = window.innerHeight - offsetY - 10;
     width = Math.round(height * RATIO);
     canvasFractal.width = canvas.width = width;
     canvasFractal.height = canvas.height = height;
@@ -153,10 +153,10 @@
             var btns = buttonsContainerEl.children;
 
             // enable other buttons
-            for (let i = btns.length - 1; i >= 0; i++) {
-                btns[i].disabled = false;
+            for (let i = btns.length - 1; i >= 0; i--) {
+                btns[i].classList.remove('current');
             }
-            btnEl.disabled = true;
+            btnEl.classList.add('current');
             setFractal(fractal);
         });
     });
