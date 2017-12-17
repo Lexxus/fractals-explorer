@@ -22,6 +22,7 @@
     const startBtn = getEl('start');
     const resetBtn = getEl('reset');
     const buttonsContainerEl = getEl('fractals');
+    const benchmarkEl = getEl('benchmark');
 
     let width = canvas.width;
     let height = canvas.height;
@@ -41,6 +42,7 @@
         currentFractal = fractals[0];
     let currentRow = 0;
     let fractalFn;
+    let timeStart;
 
     let el = canvas;
     while (el = el.offsetParent) {
@@ -53,6 +55,8 @@
     width = Math.round(height * RATIO);
     canvasFractal.width = canvas.width = width;
     canvasFractal.height = canvas.height = height;
+    canvas.parentElement.style.width = `${width}px`;
+    canvas.parentElement.style.height = `${height}px`;
 
     const imageData = ctxFractal.getImageData(0, 0, width, 1);
 
@@ -70,6 +74,7 @@
     }
 
     startBtn.addEventListener('click', function() {
+        start();
     }, false);
 
     resetBtn.addEventListener('click', function() {
@@ -179,15 +184,16 @@
         if (!worker.isRunning) {
             worker.isRunning = true;
             worker.worker.postMessage({
+                id: workerId,
                 x: iX,
                 y: nextY,
                 limit: iN,
                 step: xStep,
                 count: width,
-                fn: fractalFn,
+                strFn: fractalFn,
                 row: currentRow
             });
-            nextY += xStep;
+            nextY -= xStep;
             currentRow++;
         }
     }
@@ -213,6 +219,7 @@
             isInProgress = workers.some((item) => item.isRunning);
 
             if (!isInProgress) {
+                benchmarkEl.textContent = (Date.now() - timeStart) / 1000;
                 triggerControls(true);
             }
         }
@@ -229,13 +236,10 @@
      * Start drawing current fractal.
      */
     function start() {
-        const benchEl = getEl('benchmark');
-        let time = 0;
-
         if (!isInProgress) {
             triggerControls(false);
             isInProgress = true;
-            fractalFn = getFn('code');
+            fractalFn = getEl('code').value;
             iX = parseFloat(startXEl.value);
             iY = parseFloat(startYEl.value);
             iW = parseFloat(widthEl.value);
@@ -245,8 +249,8 @@
             nextY = iY;
 
             //console.time('fractal');
-            benchEl.innerHTML = '...';
-            time = Date.now();
+            benchmarkEl.innerHTML = '...';
+            timeStart = Date.now();
 
             for (let i = 0; i < workers.length; i++) {
                 startWorker(i);
@@ -268,10 +272,6 @@
         getEl('startX').value = cfg.x;
         getEl('startY').value = cfg.y;
         getEl('width').value = cfg.w;
-    }
-
-    function getFn(id) {
-        return new Function('x', 'y', 'limit', getEl(id).value);
     }
 
     function setFractal(fractal, notDraw) {

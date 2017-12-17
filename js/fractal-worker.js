@@ -74,7 +74,7 @@ function getColor(value, limit) {
 
     if (limit !== limitBak) {
         limitBak = limit;
-        colorStep = limit / paletteLength;
+        colorStep = paletteLength / limit;
     }
     colorPoint = Math.floor((limit - value) * colorStep) + PALETTE_SHIFT;
 
@@ -102,6 +102,10 @@ function getColor(value, limit) {
     return rgb;
 }
 
+function getFn(str) {
+    return new Function('x', 'y', 'limit', str);
+}
+
 /**
  * @type Params.
  * @property {Number | String} id - the worker ID - returns back.
@@ -127,11 +131,12 @@ onmessage = function(e) {
     const limit = params.limit;
     const step = params.step;
     const count = params.count;
-    const fn = params.fn;
+    const strFn = params.strFn;
+    const fn = getFn(strFn);
     const resultData = [];
     let x = xStart;
 
-    console.log('worker:', y, Date.now());
+    console.log('worker:', y, params.row);
     for (let i = 0, j = 0; j < count; j++) {
         const n = fn(x, y, limit);
         let rgb;
