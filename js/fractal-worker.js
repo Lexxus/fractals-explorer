@@ -12,54 +12,53 @@
 // 0x80,0   ,0xFF
 // 0xFF,0   ,0xFF
 // 0x80,0   ,0x80 - limit
-const COLOR_WEIGHT = 0x100;
-const PALETTE_SHIFT = 0x80;
+const COLOR_DEPTH = 0x100;
+const RATIO = 1;
+const PALETTE_SHIFT = Math.round(0x80 * RATIO);
+const STEP_LIMIT = Math.round(COLOR_DEPTH * RATIO);
 const palette = [{
     min: 0,
-    max: COLOR_WEIGHT,
+    max: STEP_LIMIT,
     R: '+',
     G: 0,
     B: 0
 }, {
-    min: COLOR_WEIGHT,
-    max: COLOR_WEIGHT * 2,
-    R: COLOR_WEIGHT - 1,
+    min: STEP_LIMIT,
+    max: STEP_LIMIT * 2,
+    R: COLOR_DEPTH - 1,
     G: '+',
     B: 0
 }, {
-    min: COLOR_WEIGHT * 2,
-    max: COLOR_WEIGHT * 3,
+    min: STEP_LIMIT * 2,
+    max: STEP_LIMIT * 3,
     R: '-',
-    G: COLOR_WEIGHT - 1,
+    G: COLOR_DEPTH - 1,
     B: 0
 }, {
-    min: COLOR_WEIGHT * 3,
-    max: COLOR_WEIGHT * 4,
+    min: STEP_LIMIT * 3,
+    max: STEP_LIMIT * 4,
     R: 0,
-    G: COLOR_WEIGHT - 1,
+    G: COLOR_DEPTH - 1,
     B: '+'
 }, {
-    min: COLOR_WEIGHT * 4,
-    max: COLOR_WEIGHT * 5,
+    min: STEP_LIMIT * 4,
+    max: STEP_LIMIT * 5,
     R: 0,
     G: '-',
-    B: COLOR_WEIGHT - 1
+    B: COLOR_DEPTH - 1
 }, {
-    min: COLOR_WEIGHT * 5,
-    max: COLOR_WEIGHT * 6,
+    min: STEP_LIMIT * 5,
+    max: STEP_LIMIT * 6,
     R: '+',
     G: 0,
-    B: COLOR_WEIGHT - 1
+    B: COLOR_DEPTH - 1
 }, {
-    min: COLOR_WEIGHT * 6,
-    max: COLOR_WEIGHT * 7,
+    min: STEP_LIMIT * 6,
+    max: STEP_LIMIT * 7,
     R: '-',
-    G: 0,
+    G: '+',
     B: '-'
 }];
-const paletteLength = COLOR_WEIGHT * (palette.length - 1);
-let limitBak;
-let colorStep;
 
 /**
  * Gget RGB color by value that is between 0 and limit.
@@ -70,32 +69,34 @@ let colorStep;
  */
 function getColor(value, limit) {
     const rgb = [0, 0, 0];
+    let baseShift = 0;
     let colorPoint;
 
-    if (limit !== limitBak) {
-        limitBak = limit;
-        colorStep = paletteLength / limit;
-    }
-    colorPoint = Math.floor((limit - value) * colorStep) + PALETTE_SHIFT;
+    if (value < limit) {
+        colorPoint = value + PALETTE_SHIFT;
 
-    for (let i = 0, pl = palette.length; i < pl; i++) {
-        const paletteItem = palette[i];
+        for (let i = 0, pl = palette.length; i < pl; i++) {
+            const paletteItem = palette[i];
 
-        if (colorPoint >= paletteItem.min && colorPoint < paletteItem.max) {
-            const RGB = 'RGB';
-            const delta = colorPoint - paletteItem.min;
+            if (colorPoint >= paletteItem.min + baseShift && colorPoint < paletteItem.max + baseShift) {
+                const RGB = 'RGB';
+                const delta = Math.floor((colorPoint - paletteItem.min) / RATIO);
 
-            for (let j = 0, rgbLen = RGB.length; j < rgbLen; j++) {
-                const c = RGB[j];
-                const color = paletteItem[c];
+                for (let j = 0, rgbLen = RGB.length; j < rgbLen; j++) {
+                    const c = RGB[j];
+                    const color = paletteItem[c];
 
-                if (typeof color === 'string') {
-                    rgb[j] = color === '-' ? COLOR_WEIGHT - delta : delta;
-                } else {
-                    rgb[j] = color;
+                    if (typeof color === 'string') {
+                        rgb[j] = color === '-' ? COLOR_DEPTH - delta : delta;
+                    } else {
+                        rgb[j] = color;
+                    }
                 }
+                break;
+            } else if (pl - i === 1) {
+                baseShift += paletteItem.max;
+                i = -1;
             }
-            break;
         }
     }
 
@@ -148,7 +149,7 @@ onmessage = function(e) {
         resultData[i++] = rgb ? rgb[0] : 0;
         resultData[i++] = rgb ? rgb[1] : 0;
         resultData[i++] = rgb ? rgb[2] : 0;
-        resultData[i++] = COLOR_WEIGHT;
+        resultData[i++] = COLOR_DEPTH;
 
         x += step;
     }
